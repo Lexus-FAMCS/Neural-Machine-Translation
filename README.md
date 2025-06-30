@@ -47,9 +47,7 @@ source your_env/bin/activate
 pip install -r requirements.txt
 ```
 
----
-
-## 3️⃣ Download the pretrained model weights
+### 3️⃣ Download the pretrained model weights
 
 Download the pretrained model weights from the [link](https://drive.google.com/file/d/1avuO6Tz3G4Xy-8PfA0-ltIoF2A9UfYM4/view?usp=drive_link) and run translation generation:
 
@@ -100,6 +98,7 @@ python3 script.py --help
 ## ✅ Results
 
 Saved in the `translations.txt` file.
+
 ---
 
 ## ⚡ Conclusions
@@ -107,6 +106,7 @@ Saved in the `translations.txt` file.
 The model struggles with individual words and short phrases (3–5 words).
 I believe this is due to the fact that it was trained on sentences of mean length ~7 words.
 In addition, the model has only ~265M parameters and was trained on a small dataset.
+
 ---
 
 ## 🔭 Next steps
@@ -117,4 +117,4 @@ In addition, the model has only ~265M parameters and was trained on a small data
 
 ---
 
-📄 More about the architecture:: [Attention is All You Need](https://arxiv.org/abs/1706.03762)
+📄 More about the architecture: [Attention is All You Need](https://arxiv.org/abs/1706.03762)
