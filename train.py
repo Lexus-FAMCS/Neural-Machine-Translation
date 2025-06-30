@@ -178,7 +178,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Training script for Neural Machine Translation")
     
     parser.add_argument("--data_dir", type=str, required=True, 
-                        help="Directory containing the training, validation, and test data files")
+                        help="Directory containing the training, validation, and test data files and tokenizers.")
     
     parser.add_argument("--wrap_max_len", type=int, default=32)
     parser.add_argument("--model_max_len", type=int, default=64,

@@ -1,0 +1,38 @@
+Input: Yesterday we visited a museum.
+Translation: Вчера мы случайно кэро впервые.
+
+Input: She is learning English because she wants to travel.
+Translation: Она изучает английский язык, потому что хочет путешествовать.
+
+Input: If the weather is good, we’ll have a picnic.
+Translation: Если погода будет хорошая, у нас будет пикник.
+
+Input: This restaurant is famous for its pizza.
+Translation: Этот ресторан знаменит своей пиццей.
+
+Input: She forgot to buy milk at the store.
+Translation: Она забыла купить в магазине молоко.
+
+Input: We were walking in the park when suddenly it started to rain.
+Translation: Мы шли в парке, когда вдруг начался дождь.
+
+Input: The teacher asked us to write an essay about our hobbies.
+Translation: Учитель попросил нас написанное множество мусительное о нашем увлечении.
+
+Input: I don’t know why he didn’t come to the party.
+Translation: Я не знаю, почему он не пришёл на вечеринку.
+
+Input: Apple
+Translation: выигры спортачал скончрую заключ каналрый вверх вспом заблудился закончилось редкочил ». Наш употреб лис неп каждой загряз открылоль работы бегло вопроса впер обеих A
+
+Input: Run
+Translation: Их говоряенная Хватит отправитьсяенное помолвл убийства художT позволяет избеглеб ходишь столом посмотри замечаистнымизия отно президент прид становятся ночи Машиайся предлаганер Конечноаркали языкеты между заблудилсян Нам Попросителох обна блед пытаешься углуство указанвайтеремщейшел сторонумал говоримид fнулипубли Городетки близнец предот О Эту
+
+Input: House
+Translation: Р таким мужчина N огромноедитпокой гло скучатьел мной неизбеж осторожен вернуласьеннаялен уг сконч должна теперьными скучноить сол У Щ сделала домуч
+
+Input: We go to school.
+Translation: Мы ходим в школу. Мы учимся школу.
+
+Input: It is raining.
+Translation: Дождь идет. дождей. прекрат сильный дождь. перестая дождь. Оно дождь. вышел идет дождь. Оно шёл дождь. ш дождь. уйдёт т Дождь

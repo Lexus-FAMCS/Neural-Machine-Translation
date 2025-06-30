@@ -189,8 +189,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prepare data for Neural Machine Translation")
     parser.add_argument("--data_dir", type=str, required=True, help="Path to the raw data")
     parser.add_argument("--output_dir", type=str, required=True, help="Path to save processed data")
-    parser.add_argument("--train_ratio", type=float, default=0.7, help="Ratio of training data")
-    parser.add_argument("--val_ratio", type=float, default=0.15, help="Ratio of validation data")
+    parser.add_argument("--train_ratio", type=float, default=0.82, help="Ratio of training data")
+    parser.add_argument("--val_ratio", type=float, default=0.03, help="Ratio of validation data")
 
     parser.add_argument("--vocab_size", type=int, default=10000, help="Vocabulary size for tokenizers")
     parser.add_argument("--min_frequency", type=int, default=5, help="Minimum frequency for tokens in tokenizers")
