@@ -52,7 +52,7 @@ pip install -r requirements.txt
 Download the pretrained model weights from the [link](https://drive.google.com/file/d/1avuO6Tz3G4Xy-8PfA0-ltIoF2A9UfYM4/view?usp=drive_link) and run translation generation:
 
 ```bash
-python3 translate.py --model_path path_to_pretrained_model --tokenizers_path your_repo/data/processed_data --model_max_len 64 --device your_device --num_layers 8 --d_model 1024 --num_heads 8 --d_hid 4096
+python3 translate.py --model_path path_to_pretrained_model --tokenizers_path your_repo/data/processed_data --model_max_len 64 --device your_device --num_layers 8 --d_model 1024 --num_heads 8 --d_hid 4096 --temperature 0.5
 ```
 
 You can view the training results of the pretrained model with:
