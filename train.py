@@ -180,9 +180,10 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", type=str, required=True, 
                         help="Directory containing the training, validation, and test data files and tokenizers.")
     
-    parser.add_argument("--wrap_max_len", type=int, default=32)
+    parser.add_argument("--wrap_max_len", type=int, default=32,
+                        help="Maximum length of the input sequences after wrapping. Sequences longer than this will be truncated.")
     parser.add_argument("--model_max_len", type=int, default=64,
-                        help="Maximum length of the input sequences")
+                        help="Maximum length of the model input sequences.")
     
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=5)
@@ -193,11 +194,16 @@ if __name__ == "__main__":
                        default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--seed", type=int, default=42)
 
-    parser.add_argument("--num_layers", type=int, default=6)
-    parser.add_argument("--d_model", type=int, default=512)
-    parser.add_argument("--num_heads", type=int, default=8)
-    parser.add_argument("--d_hid", type=int, default=2048)
-    parser.add_argument("--dropout", type=float, default=0.1)
+    parser.add_argument("--num_layers", type=int, default=6,
+                        help="Number of layers in the Transformer model")
+    parser.add_argument("--d_model", type=int, default=512,
+                        help="Dimension of the embedding")
+    parser.add_argument("--num_heads", type=int, default=8,
+                        help="Number of attention heads in the Transformer model")
+    parser.add_argument("--d_hid", type=int, default=2048,
+                        help="Hidden dimension of the feedforward network in the Transformer model")
+    parser.add_argument("--dropout", type=float, default=0.1,
+                        help="Dropout rate for the Transformer model")
 
     parser.add_argument("--train_log_interval", type=int, default=150, 
                         help="Interval for logging training progress")

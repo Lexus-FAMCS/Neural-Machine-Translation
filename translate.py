@@ -12,7 +12,7 @@ if __name__ == '__main__':
                         help="Path to the tokenizers directory containing 'en_tokenizer.json' and 'ru_tokenizer.json'")
     
     parser.add_argument("--model_max_len", type=int, default=64,
-                        help="Maximum length of the input sequences")
+                        help="Maximum length of the model input sequences.")
     
     parser.add_argument("--device", type=str, 
                        default="cuda" if torch.cuda.is_available() else "cpu")
