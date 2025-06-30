@@ -1,12 +1,14 @@
 # Neural Machine Translation 🇬🇧➡️🇷🇺
 
 An **Encoder-Decoder Transformer-based** translator from English to Russian.
+
 ---
 
 ## 📚 Description
 
 This repository contains a Transformer implementation for the machine translation task.  
 The model is trained on a dataset consisting of sentence pairs **English ↔ Russian**.
+
 ---
 
 ## 📂 Dataset
