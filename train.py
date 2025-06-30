@@ -19,19 +19,13 @@ class Logger:
         self.writer = SummaryWriter(log_dir=log_dir)
         self.steps = {'train': 0, 'val': 0}
 
-    def _log(self, fn_name, tag, data, mode, increment_step=True):
+    def log(self, fn_name, tag, data, mode, increment_step):
         assert mode in self.steps, f"Mode must be one of {list(self.steps.keys())}"
         step = self.steps[mode]
         fn = getattr(self.writer, fn_name)
         fn(tag, data, step)
         if increment_step:
             self.steps[mode] += 1
-
-    def log_scalar(self, tag, value, mode):
-        self._log('add_scalar', tag, value, mode, increment_step=True)
-
-    def log_text(self, tag, text, mode):
-        self._log('add_text', tag, text, mode, increment_step=False)
 
     def close(self):
         self.writer.close()
@@ -76,7 +70,7 @@ def generate_samples(model, test_loader, num_samples, device):
                     f"**Original Russian:** {ru_sentence}\n\n"
                     f"**Generated Russian:** {gen}"
                 )
-                model.logger.log_text(f'Sample {j}', text, mode='val')
+                model.logger.log('add_text', f'Sample {j}', text, mode='val', increment_step=False)
             break
 
 
@@ -93,7 +87,7 @@ def train_epoch(model,
         if i % train_log_interval == 0:
             train_loss /= num
             train_losses.append(train_loss)
-            model.logger.log_scalar('Loss/train', train_loss, mode='train')
+            model.logger.log('add_scalar', 'Loss/train', train_loss, mode='train', increment_step=True)
             train_loss = 0.0
             num = 0
 
@@ -108,21 +102,19 @@ def train_epoch(model,
                     grads[tmp[0]] += torch.norm(p.grad)
 
             for name, grad in grads.items():
-                model.logger.log_scalar(f'Grads/{name}', grad, mode='train', increment_step=False)
+                model.logger.log('add_scalar', f'Grads/{name}', grad, mode='train', increment_step=False)
             
         if i % eval_log_interval == 0:
-            val_loss = val_epoch(model, val_loader, criterion)
+            val_loss = val_epoch(model, val_loader, criterion, device)
             val_losses.append(val_loss)
             if scheduler is not None:
                 try:
                     scheduler.step()
                 except:
                     scheduler.step(val_losses[-1])
-            model.logger.log_scalar('Learning Rate', opt.param_groups[0]['lr'], mode='val')
-            model.logger.log_scalar('Loss/val', val_loss, mode='val', increment_step=False)
+            model.logger.log('add_scalar', 'Loss/val', val_loss, mode='val', increment_step=True)
+            model.logger.log('add_scalar', 'Learning Rate', opt.param_groups[0]['lr'], mode='val', increment_step=False)
             generate_samples(model, test_loader, num_samples, device)
-            val_global_step += 1
-
             model.train()
         
         en_batch, ru_batch = en_batch.to(device), ru_batch.to(device)
@@ -136,13 +128,7 @@ def train_epoch(model,
         opt.step()
 
         train_loss += loss.item()
-        num += (reference != model.ru_pad).sum().item()
-
-    if num > 0:
-        train_loss /= num
-        train_losses.append(train_loss)
-        model.logger.log_scalar('Loss/train', train_loss, mode='train', increment_step=True)
-        train_global_step += 1        
+        num += (reference != model.ru_pad).sum().item() 
 
     return train_losses, val_losses
 
@@ -154,14 +140,14 @@ def train(args):
     ru_tokenizer = Tokenizer.from_file(args.data_dir + '/ru_tokenizer.json')
     train_loader, val_loader, test_loader = data_prepare.create_dataloaders(
         data, en_tokenizer, ru_tokenizer, 
-        args.batch_size, args.max_length
+        args.batch_size, args.wrap_max_len
     )
 
     translator = transformer.Transformer(
         en_tokenizer, ru_tokenizer,
         d_model=args.d_model, num_heads=args.num_heads,
         d_hid=args.d_hid, dropout=args.dropout,
-        num_layers=args.num_layers, max_len=args.max_len,
+        num_layers=args.num_layers, max_len=args.model_max_len,
         device=args.device, logger=Logger(f'runs/{args.output_dir}')
     ).to(args.device)
     opt = torch.optim.AdamW(translator.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
@@ -180,11 +166,11 @@ def train(args):
             args.device, args.train_log_interval,
             args.eval_log_interval, args.num_samples
         )
-
+        print(f'Epoch {epoch}, validation losses: {val_losses}')
         if np.mean(val_losses) < best_val_loss:
             best_val_loss = np.mean(val_losses)
             print(f"Saving model on {epoch} epoch...")
-            torch.save(translator.state_dict(), f'{args.output_dir}/best_model.pth')
+            torch.save(translator.state_dict(), f'runs/{args.output_dir}/best_model.pth')
             print("Model saved successfully!")
     
 
@@ -194,7 +180,9 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", type=str, required=True, 
                         help="Directory containing the training, validation, and test data files")
     
-    parser.add_argument("--max_len", type=int, default=32)
+    parser.add_argument("--wrap_max_len", type=int, default=32)
+    parser.add_argument("--model_max_len", type=int, default=64,
+                        help="Maximum length of the input sequences")
     
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=5)
@@ -219,8 +207,6 @@ if __name__ == "__main__":
                         help="Number of samples to generate during validation")
     parser.add_argument("--output_dir", type=str, default="output",
                         help="Directory to save the model and TensorBoard logs")
-
-        
     
     args = parser.parse_args()
     train(args)    

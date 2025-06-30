@@ -120,6 +120,7 @@ class Transformer(nn.Module):
         
         self.device = device
         self.logger = logger
+        self.max_len = max_len
         self.en_tokenizer = en_tokenizer
         self.ru_tokenizer = ru_tokenizer
         src_vocab_size = en_tokenizer.get_vocab_size()
@@ -150,11 +151,9 @@ class Transformer(nn.Module):
 
         return self.fc(dec_output)
 
-    def generate(self, en_sentence, temperature, top_p, max_len):
+    def generate(self, en_sentence, temperature=1.0, top_p=0.9):
         with torch.no_grad():
             input_tokens = self.en_tokenizer.encode(en_sentence).ids
-            if max_len is None:
-                max_len = 2 * len(input_tokens)
             
             input_tensor = torch.tensor(input_tokens, dtype=torch.long).unsqueeze(0).to(self.device)
             enc_output = self.encoder_embedding(input_tensor)
@@ -168,7 +167,7 @@ class Transformer(nn.Module):
             ru_eos = self.ru_tokenizer.token_to_id("<eos>")
             output_tokens = [ru_bos]
             output_embedding = torch.tensor([]).to(self.device)
-            while output_tokens[-1] != ru_eos and len(output_tokens) <= max_len:
+            while output_tokens[-1] != ru_eos and len(output_tokens) <= self.max_len:
                 last_tensor = torch.tensor(output_tokens[-1]).to(self.device)
                 last_embedding = self.decoder_embedding(last_tensor).unsqueeze(0).unsqueeze(0)
                 output_embedding = torch.cat([output_embedding, last_embedding], dim=1).to(self.device)
@@ -187,4 +186,3 @@ class Transformer(nn.Module):
                     next_token = random.choice(indices_to_keep).item()
                 output_tokens.append(next_token)
         return self.ru_tokenizer.decode(output_tokens)
-

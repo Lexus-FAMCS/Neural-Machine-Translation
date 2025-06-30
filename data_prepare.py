@@ -1,4 +1,5 @@
 import argparse
+import os
 from tqdm import tqdm
 import numpy as np
 
@@ -153,6 +154,17 @@ def create_dataloaders(data, en_tokenizer, ru_tokenizer, batch_size, max_len):
                             for s in tqdm(en_sentences, desc=f'Wrapping english sentences') ]
             self.ru_tokens = [ wrap_sentence(s, ru_tokenizer, max_len) 
                             for s in tqdm(ru_sentences, desc=f'Wrapping russian sentences') ]
+            
+            # self.en_tokens = []
+            # for i, s in enumerate(tqdm(en_sentences, desc=f'Wrapping english sentences')):
+            #     if i > 1000:
+            #         break
+            #     self.en_tokens.append(wrap_sentence(s, en_tokenizer, max_len))
+            # self.ru_tokens = []
+            # for i, s in enumerate(tqdm(ru_sentences, desc=f'Wrapping russian sentences')):
+            #     if i > 1000:
+            #         break
+            #     self.ru_tokens.append(wrap_sentence(s, ru_tokenizer, max_len))
 
         def __len__(self):
             return len(self.en_tokens)
@@ -185,6 +197,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    os.makedirs(args.output_dir, exist_ok=False)
     split_data(args.data_dir, args.output_dir, args.train_ratio, args.val_ratio)
     data = load_data(args.output_dir)
     en_tokenizer, ru_tokenizer = create_tokenizers(
