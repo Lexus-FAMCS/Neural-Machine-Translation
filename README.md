@@ -74,7 +74,7 @@ python3 data_prepare.py --data_dir your_repo/data/your_raw_data --output_dir you
 
 Run training:
 ```bash
-python3 train.py --data_dir your_repo/data/your_processed_data --batch_size 64 --epochs 10 --learning_rate 1e-4 --device your_device --num_layers 6 --d_model 512 --num_heads 8 --d_hid 2048 --dropout 0.1 --train_log_interval 150 --val_log_interval 500 --output_dir your_output_dir
+python3 train.py --data_dir your_repo/data/your_processed_data --batch_size 64 --epochs 10 --learning_rate 1e-4 --device your_device --num_layers 6 --d_model 512 --num_heads 8 --d_hid 2048 --dropout 0.1 --train_log_interval 150 --eval_log_interval 500 --output_dir your_output_dir
 ```
 
 The trained model and logs will be saved to `your_repo/runs/your_output_dir`.
